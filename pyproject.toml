@@ -1,0 +1,17 @@
+[project]
+name = "natural-languages"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.7",
+]
+
+[tool.ruff]
+  line-length = 120
+  # pyflakes, pycodestyle, isort
+  lint.select = ["F", "E", "W", "I001"]
