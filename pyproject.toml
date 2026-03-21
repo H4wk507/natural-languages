@@ -1,10 +1,13 @@
 [project]
 name = "natural-languages"
 version = "0.1.0"
-description = "Add your description here"
+description = "Detecting combinatorial structures in natural language data"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "matplotlib>=3.8",
+    "seaborn>=0.13",
+]
 
 [dependency-groups]
 dev = [

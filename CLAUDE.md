@@ -1,5 +1,21 @@
 # CLAUDE.md
 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Development Commands
+
+### Package Management
+- **Install dependencies**: `uv sync` (installs from lockfile)
+- **Run with dependencies**: `uv run <command>` (e.g., `uv run python script.py`)
+
+### Code Quality
+- **Lint code**: `make lint` or `uv run ruff check .`
+- **Format code**: `make format` or `uv run ruff format .`
+- **Clean cache**: `make clean` (removes __pycache__, .mypy_cache, .ruff_cache)
+
+### Documentation
+- **Build LaTeX docs**: `make tex` (compiles docs/dokumentacja.tex to PDF)
+
 ## Project
 
 Academic project: detecting combinatorial structures (squares, palindromes, abelian squares, shuffled squares, anagrams) in natural language data (dictionaries, corpora). Python, research + experiments + LaTeX/docx documentation.
@@ -7,28 +23,23 @@ Academic project: detecting combinatorial structures (squares, palindromes, abel
 ## Structure
 
 ```
-src/
-  detectors/       # Structure detectors: squares.py, palindromes.py, abelian.py, anagrams.py, shuffled.py
-  data/            # loader.py, preprocessor.py (tokenization, normalization)
-  experiments/     # Experiment scripts (single_words.py, phrases.py, comparison.py)
-  utils/           # stats.py, viz.py (matplotlib/seaborn)
-data/              # Dictionaries, corpora
-results/           # Experiment outputs: CSV + PNG charts
-docs/              # Project documentation
-tests/             # Unit tests (pytest)
+.
+├── natural_languages/
+|   ├── common/           # Shared types
+|   ├── detectors/        # Structure detectors: squares.py, palindromes.py, abelian.py, anagrams.py, shuffled.py
+|   ├── data/             # loader.py, preprocessor.py (tokenization, normalization)
+|   ├── examples/         # Example scripts (single_words.py, phrases.py, comparison.py)
+├── docs/
+|   ├── dokumentacja.tex  # LaTeX documentation source
+|   ├── scripts/          # Scripts for generating figures
+|   ├── figures/          # Out dir for generated figures
+├── Makefile              # Makefile for lint, formating rules etc.
+└── pyproject.toml        # Project configuration and dependencies
 ```
-
-## Commands
-
-- `python -m pytest tests/` — run tests
-- `python -m src.experiments.single_words --lang pl` — dictionary experiments
-- `python -m src.experiments.phrases --corpus data/nkjp_sample.txt` — corpus experiments
-- `uv sync` — dependencies
 
 ## Stack
 
 - Python 3.11+
-- pytest for testing
 - matplotlib / seaborn for charts
 - collections.Counter for letter histograms (abelian squares, anagrams)
 - No web frameworks — this is a research project, not an application
@@ -37,7 +48,7 @@ tests/             # Unit tests (pytest)
 
 - Type hints everywhere (`def find_squares(word: str) -> list[tuple[int, int]]`)
 - Google-style docstrings
-- Variable names and comments in English, project documentation in Polish
+- Variable names in English, comments and docstrings in Polish, project documentation in Polish
 - Each detector is a separate module with a main function and a `find_all(words)` function for batch processing
 - Save experiment results as CSV (easy import into documentation tables)
 

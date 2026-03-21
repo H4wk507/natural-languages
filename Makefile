@@ -7,3 +7,5 @@ lint:
 format:
 	uv run ruff format .
 
+tex:
+	cd docs && pdflatex dokumentacja.tex
