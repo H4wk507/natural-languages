@@ -7,3 +7,6 @@ __pycache__/
 *.toc
 *.snm
 *.nav
+
+data/raw/
+results/

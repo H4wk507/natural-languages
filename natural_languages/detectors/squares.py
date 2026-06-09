@@ -9,6 +9,22 @@ class SquareDetector:
     Np. 'kankan' = 'kan' + 'kan'.
     """
 
+    def check(self, word: str) -> bool:
+        """Sprawdza, czy całe słowo jest kwadratem (postaci ww).
+
+        Args:
+            word: Słowo do sprawdzenia.
+
+        Returns:
+            True, jeśli słowo ma parzystą, niezerową długość i jego obie połowy
+            są identyczne (np. 'kankan').
+        """
+        n = len(word)
+        if n == 0 or n % 2 != 0:
+            return False
+        half = n // 2
+        return word[:half] == word[half:]
+
     def find(self, word: str) -> list[StructureMatch]:
         """Znajduje wszystkie podciągi będące kwadratami w słowie.
 

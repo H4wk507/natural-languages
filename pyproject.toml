@@ -12,9 +12,15 @@ dependencies = [
 [dependency-groups]
 dev = [
     "ruff>=0.15.7",
+    "pytest>=8",
+    "mypy>=2.1.0",
 ]
 
 [tool.ruff]
   line-length = 120
   # pyflakes, pycodestyle, isort
   lint.select = ["F", "E", "W", "I001"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

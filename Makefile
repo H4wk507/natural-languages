@@ -3,9 +3,16 @@ clean:
 
 lint: 
 	uv run ruff check .
+	uv run mypy --strict .
 
 format:
 	uv run ruff format .
+
+test:
+	uv run pytest
+
+data:
+	uv run python -m natural_languages.data.fetch
 
 tex:
 	cd docs && pdflatex dokumentacja.tex
