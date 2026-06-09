@@ -1,12 +1,12 @@
 # TODO
 
-> Część pomysłów inspirowana artykułem prowadzącego (dr B. Pawlik, *The Secret Life of Words*, Chalkdust) — celowo wychodzą poza „podręcznikowe” minimum.
+> Część pomysłów inspirowana artykułem prowadzącego (dr B. Pawlik, _The Secret Life of Words_, Chalkdust) — celowo wychodzą poza „podręcznikowe” minimum.
 
 ## ⭐ Pomysły wyróżniające (poza minimum)
 
 ### Nowe struktury i detektory
 
-- [ ] `TangramDetector` — **tangram**: słowo, w którym każda litera występuje parzystą liczbę razy (pojęcie z artykułu prowadzącego). Parzystość to **warunek konieczny** bycia przetasowanym kwadratem → użyć jako szybki pre-filtr przed kosztowną detekcją shuffled square. Do dokumentacji jako lemat: *shuffled square ⟹ tangram* (plus kontrprzykład, że nie odwrotnie).
+- [ ] `TangramDetector` — **tangram**: słowo, w którym każda litera występuje parzystą liczbę razy (pojęcie z artykułu prowadzącego). Parzystość to **warunek konieczny** bycia przetasowanym kwadratem → użyć jako szybki pre-filtr przed kosztowną detekcją shuffled square. Do dokumentacji jako lemat: _shuffled square ⟹ tangram_ (plus kontrprzykład, że nie odwrotnie).
 - [ ] `SquareFreeDetector` — wykrywanie słów **bezkwadratowych** (Thue, 1906) z nawiązaniem do słowa **Prouhet–Thue–Morse**: nad alfabetem 3-literowym istnieją dowolnie długie słowa bezkwadratowe, nad 2-literowym tylko do długości 3.
 - [ ] Rozszerzyć hierarchię ograniczeń: słowa **overlap-free** oraz **bezkwadratowe abelowo** (abelian-square-free) — ładne do tabeli porównawczej między językami.
 
@@ -14,7 +14,7 @@
 
 - [ ] Najdłuższe **słowo bezkwadratowe** w słowniku każdego języka — ranking + ciekawostki (czy w ogóle istnieją długie słowa bez powtórzonego bloku?).
 - [ ] Katalog **dwuwyrazowych przetasowanych kwadratów** — odtworzyć wynik Lucasa Mola (9659 par w angielskim) i policzyć analogicznie dla polskiego; porównać liczby między językami.
-- [ ] Najdłuższy **jednowyrazowy** shuffled square w każdym języku (ang. *prepress*, *sestet*; fr. *tuteurer*) — poszukać polskich odpowiedników.
+- [ ] Najdłuższy **jednowyrazowy** shuffled square w każdym języku (ang. _prepress_, _sestet_; fr. _tuteurer_) — poszukać polskich odpowiedników.
 - [ ] Najdłuższe **zdanie** będące przetasowanym kwadratem — nawiązanie do rekordu 48 liter Saviniena Kreczmana („In nine innings, Eagles battle Boston to soar near Wien win”).
 
 ### Łamigłówki i smaczki na prezentację
@@ -27,11 +27,11 @@
 
 - [ ] Mini-eksperyment wokół **otwartego problemu** z artykułu: minimalny rozmiar alfabetu unikającego przetasowanych kwadratów (hipoteza: 4 litery, dowiedzione: 6) — generować słowa nad alfabetem k-literowym i sprawdzać unikanie.
 - [ ] Zliczać znalezione struktury i dopasować do ciągów **OEIS** (np. liczba słów bezkwadratowych, złożoność abelowa) — niezależna weryfikacja poprawności detektorów.
-- [ ] Sformułować i udowodnić proste lematy: długość tangramu jest parzysta; shuffled square ⟹ tangram; (ambitne, pytanie otwarte z artykułu) czy istnieją zdania będące przetasowanym kwadratem *przetasowania samych siebie*.
+- [ ] Sformułować i udowodnić proste lematy: długość tangramu jest parzysta; shuffled square ⟹ tangram; (ambitne, pytanie otwarte z artykułu) czy istnieją zdania będące przetasowanym kwadratem _przetasowania samych siebie_.
 
 ### Algorytmika (z nutą NP-trudności)
 
-- [ ] Rozpoznawanie shuffled square jest **NP-zupełne** (Buss & Sołtys, *Unshuffling a square is NP-hard*) — opisać i zaimplementować ścieżkę: filtr tangramowy → DP/heurystyka dla krótkich słów → ewentualna redukcja do **SAT** dla dłuższych przypadków.
+- [ ] Rozpoznawanie shuffled square jest **NP-zupełne** (Buss & Sołtys, _Unshuffling a square is NP-hard_) — opisać i zaimplementować ścieżkę: filtr tangramowy → DP/heurystyka dla krótkich słów → ewentualna redukcja do **SAT** dla dłuższych przypadków.
 - [ ] Wizualizacje wyróżniające: dot-plot / macierz samonałożeń pokazująca strukturę kwadratu w słowie, wizualizacja słowa Thue-Morse'a, „mapa” liter najczęściej budujących palindromy.
 
 ## Detektory
@@ -44,17 +44,23 @@
 
 ## Dane
 
-- [ ] Zebrać i dodać słowniki do analizy (polski, angielski, inne języki)
-- [ ] Zebrać korpusy tekstowe do eksperymentów
-- [ ] Rozszerzyć `TextPreprocessor` o obsługę większej liczby alfabetów (np. cyrylica, inne języki europejskie)
+- [ ] **Decyzja o źródłach (do udokumentowania!)**: na razie świadomie zostajemy przy hunspell = **lematy** (formy hasłowe), spójne PL↔EN. Alternatywy z **formami odmienionymi** (fleksja → znacznie więcej kwadratów abelowych) — sparkowane:
+  - PL: [Morfologik/PoliMorf](https://github.com/morfologik/polimorfologik) (BSD, ~3,5 M form, 1 zip + TSV) lub [sjp.pl „odmiany”](https://sjp.pl/sl/odmiany/) (CC BY 4.0, 2,76 M); naukowo [SGJP](https://sgjp.pl/) (BSD)
+  - EN: [SCOWL](https://wordlist.aspell.net/) (MIT-like, regulowany rozmiar; ~1 h pracy) lub [dwyl words_alpha](https://github.com/dwyl/english-words) (Unlicense, 370 k, 1 plik)
+  - sweet spot gdyby wracać: **Morfologik + dwyl** (oba 1-plikowe, czyste licencje, ~1 h łącznie)
+- [ ] Dodać kolejne języki — **bez przesady**, alfabet już wspiera `TextPreprocessor` (zero zmian w kodzie, słowniki hunspell LibreOffice):
+  - **francuski** (`fr`) — nawiązuje do _tuteurer_ z artykułu; Romance, uboga fleksja
+  - **niemiecki** (`de`) — `äöüß`, złożenia → bardzo długie słowa
+  - **fiński** (`fi`) — `äö`, aglutynacja + zdwojenia `kk/aa/ää` → najżyźniejszy dla kwadratów/abelowych
+  - stretch (wymaga rozszerzenia alfabetu): hiszpański (`ñ`), włoski (`ì ò`), cyrylica
+- [ ] Zebrać korpusy tekstowe do eksperymentów (formy realnie użyte, nie tylko hasła słownikowe)
+- [ ] Rozszerzyć `TextPreprocessor` o obsługę większej liczby alfabetów (np. cyrylica, hiszpański `ñ`)
 - [ ] Dodać walidację danych wejściowych w `DataLoader`
 
 ## Eksperymenty i przykłady
 
 - [ ] Napisać skrypt `examples/phrases.py` — analiza fraz (wielowyrazowych)
 - [ ] Napisać skrypt `examples/comparison.py` — porównanie wyników między językami
-- [ ] Eksperymenty na słownikach: statystyki występowania kwadratów, palindromów itp.
-- [ ] Zapisywać wyniki eksperymentów jako CSV
 
 ## Wykresy
 
@@ -69,4 +75,5 @@
 - [ ] Opisać definicje matematyczne struktur
 - [ ] Opisać algorytmy użyte w detektorach
 - [ ] Zamieścić wyniki eksperymentów (tabele z CSV, wykresy)
-- [ ] Dodać bibliografię (Lothaire, Crochemore & Rytter, TBN, OEIS, **Pawlik — *The Secret Life of Words*, Chalkdust**, Thue 1906, Buss & Sołtys 2014)
+- [ ] Udokumentować **dobór źródeł danych**: lematy vs formy odmienione, skąd różnice rozmiarów (308 k lematów vs 2,76 M form), licencje, wersja/data pobrania, normalizacja, dedup (sekcje „Metodyka” + „Ograniczenia”)
+- [ ] Dodać bibliografię (Lothaire, Crochemore & Rytter, TBN, OEIS, **Pawlik — _The Secret Life of Words_, Chalkdust**, Thue 1906, Buss & Sołtys 2014)
