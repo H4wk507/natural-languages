@@ -5,6 +5,8 @@ działa niezależnie od systemu operacyjnego (cross-platform — nie korzysta z
 lokalnych słowników typu ``/usr/share/dict/words``):
 
     - angielski: ``en_US`` (kodowanie UTF-8),
+    - francuski: ``fr_FR`` (kodowanie UTF-8),
+    - niemiecki: ``de_DE_frami`` (kodowanie ISO-8859-1),
     - polski: ``pl_PL`` (kodowanie ISO-8859-2).
 
 Oba to formy hasłowe (lematy), dzięki czemu porównanie międzyjęzykowe opiera się
@@ -15,9 +17,12 @@ słowo na linię, UTF-8) trafiają do katalogu docelowego i można je wskazać p
 """
 
 import argparse
+import ssl
 import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
+
+import certifi
 
 BASE_URL = "https://raw.githubusercontent.com/LibreOffice/dictionaries/master"
 
@@ -38,9 +43,18 @@ class HunspellSource:
 
 # Rejestr obsługiwanych języków: etykieta -> źródło hunspell.
 SOURCES: dict[str, HunspellSource] = {
+    "de": HunspellSource(f"{BASE_URL}/de/de_DE_frami.dic", "iso-8859-1"),
     "en": HunspellSource(f"{BASE_URL}/en/en_US.dic", "utf-8"),
+    "fr": HunspellSource(f"{BASE_URL}/fr_FR/fr.dic", "utf-8"),
     "pl": HunspellSource(f"{BASE_URL}/pl_PL/pl_PL.dic", "iso-8859-2"),
 }
+
+
+def download_file(url: str, path: Path) -> None:
+    """Pobiera plik HTTPS z użyciem przenośnego zestawu certyfikatów CA."""
+    context = ssl.create_default_context(cafile=certifi.where())
+    with urllib.request.urlopen(url, context=context) as response:
+        path.write_bytes(response.read())
 
 
 def prepare_hunspell(dic_path: Path, out_path: Path, encoding: str = "utf-8", skip_digits: bool = True) -> int:
@@ -92,7 +106,7 @@ def fetch_language(language: str, out_dir: Path) -> Path:
     dic_path = out_dir / Path(source.dic_url).name
     if not dic_path.exists():
         print(f"Pobieram słownik [{language}] z {source.dic_url} ...")
-        urllib.request.urlretrieve(source.dic_url, dic_path)
+        download_file(source.dic_url, dic_path)
 
     out_path = out_dir / f"{language}.txt"
     count = prepare_hunspell(dic_path, out_path, encoding=source.encoding)
