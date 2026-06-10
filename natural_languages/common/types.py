@@ -1,7 +1,17 @@
 from dataclasses import dataclass
 from typing import Literal
 
-StructureType = Literal["square", "cube", "palindrome", "abelian_square", "shuffled_square"]
+StructureType = Literal[
+    "square",
+    "cube",
+    "palindrome",
+    "abelian_square",
+    "abelian_square_free",
+    "shuffled_square",
+    "overlap_free",
+    "square_free",
+    "tangram",
+]
 
 
 @dataclass(frozen=True)
