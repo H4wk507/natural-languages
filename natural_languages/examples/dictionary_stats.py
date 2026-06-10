@@ -5,10 +5,7 @@ Dla każdego słowa sprawdzamy, czy CAŁE słowo jest:
     - palindromem (np. kajak),
     - kwadratem abelowym (np. kryptoportyk),
     - tangramem,
-    - przetasowanym kwadratem (np. prepress),
-    - słowem bezkwadratowym,
-    - słowem overlap-free,
-    - słowem bezkwadratowym abelowo.
+    - przetasowanym kwadratem (np. prepress).
 
 Dodatkowo zliczamy grupy anagramów. Wyniki trafiają do dwóch plików CSV
 (podsumowanie + katalog trafień), a na ekran wypisywane są rekordy długości.
@@ -29,13 +26,10 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from natural_languages.data import DataLoader, TextPreprocessor
 from natural_languages.detectors import (
     AbelianSquareDetector,
-    AbelianSquareFreeDetector,
     AnagramDetector,
-    OverlapFreeDetector,
     PalindromeDetector,
     ShuffledSquareDetector,
     SquareDetector,
-    SquareFreeDetector,
     TangramDetector,
 )
 
@@ -46,9 +40,6 @@ STRUCTURES = [
     "abelian_square",
     "tangram",
     "shuffled_square",
-    "square_free",
-    "overlap_free",
-    "abelian_square_free",
 ]
 LABELS = {
     "square": "kwadrat (ww)",
@@ -56,9 +47,6 @@ LABELS = {
     "abelian_square": "kwadrat abelowy",
     "tangram": "tangram",
     "shuffled_square": "przetasowany kwadrat",
-    "square_free": "bezkwadratowe",
-    "overlap_free": "overlap-free",
-    "abelian_square_free": "bezkwadratowe abelowo",
 }
 
 
@@ -84,9 +72,6 @@ def analyze_words(
     abelian = AbelianSquareDetector()
     tangram = TangramDetector()
     shuffled = ShuffledSquareDetector()
-    square_free = SquareFreeDetector()
-    overlap_free = OverlapFreeDetector()
-    abelian_square_free = AbelianSquareFreeDetector()
 
     counts = dict.fromkeys(STRUCTURES, 0)
     longest: dict[str, tuple[str, int]] = {k: ("", 0) for k in STRUCTURES}
@@ -102,9 +87,6 @@ def analyze_words(
             # Przetasowane kwadraty: detekcja jest wykładnicza, więc ograniczamy
             # długość. Parzystość liter (warunek konieczny) sprawdza sam detektor.
             "shuffled_square": (2 <= n <= max_shuffled_len and n % 2 == 0 and shuffled.check(word)),
-            "square_free": square_free.check(word),
-            "overlap_free": overlap_free.check(word),
-            "abelian_square_free": abelian_square_free.check(word),
         }
         if any(flags.values()):
             hits.append((word, n, flags))

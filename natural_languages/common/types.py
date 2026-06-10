@@ -6,10 +6,7 @@ StructureType = Literal[
     "cube",
     "palindrome",
     "abelian_square",
-    "abelian_square_free",
     "shuffled_square",
-    "overlap_free",
-    "square_free",
     "tangram",
 ]
 
