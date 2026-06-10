@@ -4,7 +4,15 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from natural_languages.data import TextPreprocessor
-from natural_languages.detectors import AbelianSquareDetector, PalindromeDetector, SquareDetector
+from natural_languages.detectors import (
+    AbelianSquareDetector,
+    AbelianSquareFreeDetector,
+    OverlapFreeDetector,
+    PalindromeDetector,
+    SquareDetector,
+    SquareFreeDetector,
+    TangramDetector,
+)
 
 
 def analyze_word(word: str) -> None:
@@ -21,6 +29,10 @@ def analyze_word(word: str) -> None:
     squares = SquareDetector()
     palindromes = PalindromeDetector(min_length=3)
     abelian = AbelianSquareDetector()
+    tangrams = TangramDetector()
+    square_free = SquareFreeDetector()
+    overlap_free = OverlapFreeDetector()
+    abelian_square_free = AbelianSquareFreeDetector()
 
     sq = squares.find(normalized)
     if sq:
@@ -34,6 +46,22 @@ def analyze_word(word: str) -> None:
     if ab:
         print(f"  Kwadraty abelowe: {[(m.parts, m.start, m.end) for m in ab]}")
 
+    tg = tangrams.find(normalized)
+    if tg:
+        print(f"  Tangram: {[(m.word, m.start, m.end) for m in tg]}")
+
+    sf = square_free.find(normalized)
+    if sf:
+        print("  Bezkwadratowe: tak")
+
+    of = overlap_free.find(normalized)
+    if of:
+        print("  Overlap-free: tak")
+
+    asf = abelian_square_free.find(normalized)
+    if asf:
+        print("  Bezkwadratowe abelowo: tak")
+
     print()
 
 
@@ -45,6 +73,11 @@ def main() -> None:
         "abracadabra",
         "palindrom",
         "tatar",
+        "aabbcc",
+        "abcab",
+        "aba",
+        "abac",
+        "abacaba",
     ]
     for word in examples:
         analyze_word(word)

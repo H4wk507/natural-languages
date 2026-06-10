@@ -6,9 +6,9 @@
 
 ### Nowe struktury i detektory
 
-- [ ] `TangramDetector` — **tangram**: słowo, w którym każda litera występuje parzystą liczbę razy (pojęcie z artykułu prowadzącego). Parzystość to **warunek konieczny** bycia przetasowanym kwadratem → użyć jako szybki pre-filtr przed kosztowną detekcją shuffled square. Do dokumentacji jako lemat: _shuffled square ⟹ tangram_ (plus kontrprzykład, że nie odwrotnie).
-- [ ] `SquareFreeDetector` — wykrywanie słów **bezkwadratowych** (Thue, 1906) z nawiązaniem do słowa **Prouhet–Thue–Morse**: nad alfabetem 3-literowym istnieją dowolnie długie słowa bezkwadratowe, nad 2-literowym tylko do długości 3.
-- [ ] Rozszerzyć hierarchię ograniczeń: słowa **overlap-free** oraz **bezkwadratowe abelowo** (abelian-square-free) — ładne do tabeli porównawczej między językami.
+- [x] `TangramDetector` — **tangram**: słowo, w którym każda litera występuje parzystą liczbę razy (pojęcie z artykułu prowadzącego). Parzystość to **warunek konieczny** bycia przetasowanym kwadratem → użyć jako szybki pre-filtr przed kosztowną detekcją shuffled square. Do dokumentacji jako lemat: _shuffled square ⟹ tangram_ (plus kontrprzykład, że nie odwrotnie).
+- [x] `SquareFreeDetector` — wykrywanie słów **bezkwadratowych** (Thue, 1906) z nawiązaniem do słowa **Prouhet–Thue–Morse**: nad alfabetem 3-literowym istnieją dowolnie długie słowa bezkwadratowe, nad 2-literowym tylko do długości 3.
+- [x] Rozszerzyć hierarchię ograniczeń: słowa **overlap-free** oraz **bezkwadratowe abelowo** (abelian-square-free) — ładne do tabeli porównawczej między językami.
 
 ### Polowanie na rekordy w językach naturalnych
 
@@ -75,5 +75,7 @@
 - [ ] Opisać definicje matematyczne struktur
 - [ ] Opisać algorytmy użyte w detektorach
 - [ ] Zamieścić wyniki eksperymentów (tabele z CSV, wykresy)
-- [ ] Udokumentować **dobór źródeł danych**: lematy vs formy odmienione, skąd różnice rozmiarów (308 k lematów vs 2,76 M form), licencje, wersja/data pobrania, normalizacja, dedup (sekcje „Metodyka” + „Ograniczenia”)
+      <<<<<<< HEAD
+- [ ] # Udokumentować **dobór źródeł danych**: lematy vs formy odmienione, skąd różnice rozmiarów (308 k lematów vs 2,76 M form), licencje, wersja/data pobrania, normalizacja, dedup (sekcje „Metodyka” + „Ograniczenia”)
+  > > > > > > > jan/additional-detectors
 - [ ] Dodać bibliografię (Lothaire, Crochemore & Rytter, TBN, OEIS, **Pawlik — _The Secret Life of Words_, Chalkdust**, Thue 1906, Buss & Sołtys 2014)

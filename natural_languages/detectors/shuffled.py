@@ -1,7 +1,8 @@
-from collections import Counter
 from itertools import combinations
 
 from natural_languages.common import StructureMatch
+
+from .tangrams import TangramDetector
 
 
 class ShuffledSquareDetector:
@@ -34,8 +35,7 @@ class ShuffledSquareDetector:
                 f"Długość słowa {n} przekracza maksimum {self.MAX_WORD_LENGTH} dla detekcji przetasowanych kwadratów"
             )
 
-        # Szybkie sprawdzenie: każdy znak musi wystąpić parzystą liczbę razy
-        if any(count % 2 != 0 for count in Counter(word).values()):
+        if not TangramDetector().check(word):
             return False
 
         half = n // 2
