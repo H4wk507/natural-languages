@@ -3,6 +3,28 @@ from collections import Counter
 from natural_languages.common import StructureMatch
 
 
+def _apply_delta(diff: dict[str, int], nonzero: int, char: str, delta: int) -> int:
+    """Aktualizuje wektor różnic liczności i zwraca nową liczbę niezerowych pozycji.
+
+    Args:
+        diff: Wektor różnic ``freq(w1) - freq(w2)`` (modyfikowany w miejscu).
+        nonzero: Aktualna liczba liter o niezerowej różnicy.
+        char: Litera, której różnicę zmieniamy.
+        delta: Zmiana różnicy (zwykle +1 lub -1).
+
+    Returns:
+        Zaktualizowana liczba liter o niezerowej różnicy.
+    """
+    before = diff.get(char, 0)
+    after = before + delta
+    diff[char] = after
+    if before == 0 and after != 0:
+        return nonzero + 1
+    if before != 0 and after == 0:
+        return nonzero - 1
+    return nonzero
+
+
 class AbelianSquareDetector:
     """Detektor kwadratów abelowych w słowach.
 
@@ -28,28 +50,51 @@ class AbelianSquareDetector:
     def find(self, word: str) -> list[StructureMatch]:
         """Znajduje wszystkie podciągi będące kwadratami abelowymi w słowie.
 
+        Dla ustalonej długości połowy ``L`` przesuwamy dwa sąsiednie okna długości
+        ``L`` i utrzymujemy wektor różnic ich liczności, aktualizowany w O(1) na
+        krok — zamiast budować nowe ``Counter`` dla każdego podciągu. Łącznie
+        O(n^2) zamiast O(n^3).
+
         Args:
             word: Słowo do analizy.
 
         Returns:
-            Lista obiektów StructureMatch dla każdego kwadratu abelowego.
+            Lista obiektów StructureMatch dla każdego kwadratu abelowego,
+            uporządkowana rosnąco po (start, end).
         """
         results: list[StructureMatch] = []
         n = len(word)
-        for i in range(n):
-            for half_len in range(1, (n - i) // 2 + 1):
-                w1 = word[i : i + half_len]
-                w2 = word[i + half_len : i + 2 * half_len]
-                if Counter(w1) == Counter(w2):
+        for half in range(1, n // 2 + 1):
+            diff: dict[str, int] = {}
+            nonzero = 0
+            for k in range(half):
+                nonzero = _apply_delta(diff, nonzero, word[k], 1)
+            for k in range(half, 2 * half):
+                nonzero = _apply_delta(diff, nonzero, word[k], -1)
+
+            i = 0
+            while True:
+                if nonzero == 0:
                     results.append(
                         StructureMatch(
-                            word=word[i : i + 2 * half_len],
+                            word=word[i : i + 2 * half],
                             start=i,
-                            end=i + 2 * half_len,
+                            end=i + 2 * half,
                             structure_type="abelian_square",
-                            parts=(w1, w2),
+                            parts=(word[i : i + half], word[i + half : i + 2 * half]),
                         )
                     )
+                if i + 2 * half >= n:
+                    break
+                # Okno w1 traci word[i], zyskuje word[i+half]; okno w2 (odejmowane)
+                # traci word[i+half], zyskuje word[i+2*half].
+                nonzero = _apply_delta(diff, nonzero, word[i], -1)
+                nonzero = _apply_delta(diff, nonzero, word[i + half], 1)
+                nonzero = _apply_delta(diff, nonzero, word[i + half], 1)
+                nonzero = _apply_delta(diff, nonzero, word[i + 2 * half], -1)
+                i += 1
+
+        results.sort(key=lambda match: (match.start, match.end))
         return results
 
     def find_all(self, words: list[str]) -> dict[str, list[StructureMatch]]:

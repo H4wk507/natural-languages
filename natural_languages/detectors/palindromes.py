@@ -26,30 +26,67 @@ class PalindromeDetector:
         """
         return word == word[::-1]
 
-    def find(self, word: str) -> list[StructureMatch]:
-        """Znajduje wszystkie palindromiczne podciągi w słowie.
+    @staticmethod
+    def _palindrome_radii(word: str) -> list[int]:
+        """Liczy promienie palindromów algorytmem Manachera w czasie O(n).
+
+        Na ciągu z wstawionymi strażnikami ``^#...#$`` (między znaki i na brzegi)
+        promień w danym centrum jest równy długości najdłuższego palindromu w
+        oryginalnym słowie o tym centrum — bez osobnej obsługi długości parzystych
+        i nieparzystych.
 
         Args:
             word: Słowo do analizy.
 
         Returns:
-            Lista obiektów StructureMatch dla każdego palindromu.
+            Tablica promieni indeksowana centrami ciągu z strażnikami.
+        """
+        t = "^#" + "#".join(word) + "#$"
+        n = len(t)
+        radius = [0] * n
+        center = right = 0
+        for i in range(1, n - 1):
+            if i < right:
+                radius[i] = min(right - i, radius[2 * center - i])
+            while t[i + radius[i] + 1] == t[i - radius[i] - 1]:
+                radius[i] += 1
+            if i + radius[i] > right:
+                center, right = i, i + radius[i]
+        return radius
+
+    def find(self, word: str) -> list[StructureMatch]:
+        """Znajduje wszystkie palindromiczne podciągi w słowie.
+
+        Promienie liczymy raz algorytmem Manachera (O(n)), a następnie z każdego
+        centrum odtwarzamy wszystkie palindromy (kurcząc od najdłuższego co 2 znaki).
+        Łącznie O(n + liczba palindromów) — zamiast O(n^3) jak naiwne porównywanie
+        każdego podciągu z jego odwróceniem.
+
+        Args:
+            word: Słowo do analizy.
+
+        Returns:
+            Lista obiektów StructureMatch dla każdego palindromu, uporządkowana
+            rosnąco po (start, end).
         """
         results: list[StructureMatch] = []
-        n = len(word)
-        for i in range(n):
-            for j in range(i + self.min_length, n + 1):
-                sub = word[i:j]
-                if sub == sub[::-1]:
-                    results.append(
-                        StructureMatch(
-                            word=sub,
-                            start=i,
-                            end=j,
-                            structure_type="palindrome",
-                            parts=(sub,),
-                        )
+        if len(word) < self.min_length:
+            return results
+        radius = self._palindrome_radii(word)
+        for center in range(1, len(radius) - 1):
+            for length in range(radius[center], self.min_length - 1, -2):
+                start = (center - length) // 2
+                sub = word[start : start + length]
+                results.append(
+                    StructureMatch(
+                        word=sub,
+                        start=start,
+                        end=start + length,
+                        structure_type="palindrome",
+                        parts=(sub,),
                     )
+                )
+        results.sort(key=lambda match: (match.start, match.end))
         return results
 
     def find_all(self, words: list[str]) -> dict[str, list[StructureMatch]]:
