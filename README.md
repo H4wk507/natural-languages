@@ -57,3 +57,10 @@ uv run python -m natural_languages.examples.dictionary_stats --input data/raw/pl
 ```
 
 Szczegóły i źródła danych: [`data/README.md`](data/README.md).
+
+## Autorzy
+
+- Piotr Skowroński
+- Jan Rapacz
+- Jakub Pietrasik
+- Jakub Małecki
