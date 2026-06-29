@@ -16,3 +16,12 @@ data:
 
 tex:
 	cd docs && pdflatex dokumentacja.tex
+
+ANALYSIS_ARCHIVE_NAME = Skowronski-Rapacz-Pietrasik-Malecki-jezyki-naturalne-analiza
+zip-analysis:
+	rm -rf $(ANALYSIS_ARCHIVE_NAME) $(ANALYSIS_ARCHIVE_NAME).zip
+	mkdir -p $(ANALYSIS_ARCHIVE_NAME)
+	cp docs/prezentacja.pdf docs/dokumentacja.pdf $(ANALYSIS_ARCHIVE_NAME)/
+	cp docs/detectors.ipynb docs/dictionaries.ipynb docs/books.ipynb docs/records.ipynb $(ANALYSIS_ARCHIVE_NAME)/
+	zip -9 -r $(ANALYSIS_ARCHIVE_NAME).zip $(ANALYSIS_ARCHIVE_NAME)
+	rm -rf $(ANALYSIS_ARCHIVE_NAME)
